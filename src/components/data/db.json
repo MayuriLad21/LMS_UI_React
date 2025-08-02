@@ -1,0 +1,22 @@
+{
+  "courses": [
+    {
+      "id": "1",
+      "title": "React Basics",
+      "instructor": "John Doe",
+      "duration": "4 weeks"
+    },
+    {
+      "id": "2",
+      "title": "Advanced JS",
+      "instructor": "Jane Smith",
+      "duration": "6 weeks"
+    },
+    {
+      "id": "d894",
+      "title": "abc",
+      "instructor": "vks",
+      "duration": "2 month"
+    }
+  ]
+}
