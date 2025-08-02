@@ -17,6 +17,12 @@
       "title": "abc",
       "instructor": "vks",
       "duration": "2 month"
+    },
+    {
+      "id": "1234",
+      "title": "xyz",
+      "instructor": "test1",
+      "duration": "3 month"
     }
   ]
 }
