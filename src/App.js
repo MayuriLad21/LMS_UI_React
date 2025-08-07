@@ -6,6 +6,7 @@ import Login from './components/Login';
 import Dashboard from './components/Dashboard';
 import CourseList from './components/CourseList';
 import AddCourse from './components/AddCourse';
+import StudentList from './components/StudentList'; 
 
 function App() {
   const isAuthenticated = localStorage.getItem('authenticated');
@@ -23,6 +24,7 @@ function App() {
             element={isAuthenticated ? <CourseList /> : <Navigate to="/" />} 
           />
           <Route path="/add-course" element={isAuthenticated ? <AddCourse /> : <Navigate to="/" />} />
+          <Route path="/studentsList" element={isAuthenticated ? <StudentList /> : <Navigate to="/" />} />
         </Routes>
       </Router>
     
