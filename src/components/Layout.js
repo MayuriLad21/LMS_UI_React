@@ -18,6 +18,7 @@ const Layout = ({ children }) => {
           <Link to="/dashboard" style={styles.link}>Dashboard</Link>
           <Link to="/courses" style={styles.link}>Course List</Link>
          <Link to="/add-course" style={styles.link}>Add Course</Link>
+          <Link to="/studentsList" style={styles.link}>Student List</Link>
         </nav>
       </aside>
       <main style={styles.main}>
