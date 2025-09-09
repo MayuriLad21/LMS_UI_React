@@ -1,24 +1,45 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
-const Login = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+export default function Login() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
   const navigate = useNavigate();
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    if (email === 'admin@lms.com' && password === 'admin123') {
-      localStorage.setItem('authenticated', 'true');
-      localStorage.setItem('username', 'Admin');
-      navigate('/dashboard');
-    } else {
-      alert('Invalid credentials');
+    setError("");
+
+    try {
+      const response = await axios.post("https://localhost:7098/api/Auth/login", {
+        email,
+        password,
+      });
+
+      if (response.data && response.data.token) {
+        // Save JWT token
+        localStorage.setItem("token", response.data.token);
+
+        // Optionally save role if API returns it
+        if (response.data.user) {
+          localStorage.setItem("user", JSON.stringify(response.data.user));
+        }
+
+        // Redirect to Dashboard
+        navigate("/dashboard");
+      } else {
+        setError("Invalid login response");
+      }
+    } catch (err) {
+      setError("Invalid email or password");
     }
   };
 
   return (
-    <div style={styles.wrapper}>
+   
+     <div style={styles.wrapper}>
       <form onSubmit={handleLogin} style={styles.form}>
         <h2 style={styles.title}>Login to VKS LMS</h2>
         <input
@@ -38,10 +59,19 @@ const Login = () => {
           required
         />
         <button type="submit" style={styles.button}>Login</button>
+        <div className="flex justify-between text-sm mt-4">
+          <a href="/register" className="text-blue-500 hover:underline">
+            Register
+          </a>
+          {error && <p style={{ color: 'red', marginTop: '10px' }}>{error}</p>}
+        </div>
       </form>
+      
     </div>
+
+
   );
-};
+}
 
 const styles = {
   wrapper: {
@@ -80,5 +110,3 @@ const styles = {
     cursor: 'pointer'
   }
 };
-
-export default Login;

@@ -7,11 +7,17 @@ import Dashboard from './components/Dashboard';
 import CourseList from './components/CourseList';
 import AddCourse from './components/AddCourse';
 import StudentList from './components/StudentList'; 
+import Profile from "./components/Profile";
+import CourseDetails from "./components/CourseDetails";
+import Registeruser from './components/Register';
+import { AuthProvider } from "./components/AuthContext";
 
 function App() {
-  const isAuthenticated = localStorage.getItem('authenticated');
+  const isAuthenticated = localStorage.getItem('token') ? true : false;
+
+
   return (
-  
+    <AuthProvider>  
       <Router>
         <Routes>
           <Route path="/" element={<Login />} />
@@ -23,11 +29,14 @@ function App() {
             path="/courses" 
             element={isAuthenticated ? <CourseList /> : <Navigate to="/" />} 
           />
+           <Route path="/profile"  element={isAuthenticated ? <Profile /> : <Navigate to="/" />} />
           <Route path="/add-course" element={isAuthenticated ? <AddCourse /> : <Navigate to="/" />} />
           <Route path="/studentsList" element={isAuthenticated ? <StudentList /> : <Navigate to="/" />} />
+          <Route path="/course/:id" element={isAuthenticated ? <CourseDetails /> : <Navigate to="/" />} />
+          <Route path="/register" element={<Registeruser />} />
         </Routes>
       </Router>
-    
+    </AuthProvider>
   );
 }
 

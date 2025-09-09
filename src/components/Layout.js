@@ -1,14 +1,24 @@
-import React from 'react';
+import React, { useState } from "react";
 import { useNavigate, Link } from 'react-router-dom';
+import { FaUserCircle } from "react-icons/fa";
 
 const Layout = ({ children }) => {
   const navigate = useNavigate();
-  const username = localStorage.getItem('username') || 'User';
+  const [open, setOpen] = useState(false);
+
+
+  const user = JSON.parse(localStorage.getItem("user")) || {
+    userName: "User",
+    email: "user@example.com"
+   
+  };
 
   const handleLogout = () => {
     localStorage.clear();
     navigate('/');
   };
+
+  
 
   return (
     <div style={styles.container}>
@@ -21,17 +31,48 @@ const Layout = ({ children }) => {
           <Link to="/studentsList" style={styles.link}>Student List</Link>
         </nav>
       </aside>
-      <main style={styles.main}>
+     <main style={styles.main}>
+        {/* Header */}
         <header style={styles.header}>
-         <div></div> 
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-          <span>{username}</span>
-          <button onClick={handleLogout} style={styles.logoutButton}>Logout</button>
-        </div>
+          <div></div>
+          <div style={{ position: "relative" }}>
+            {/* User Icon */}
+            <FaUserCircle
+              size={32}
+              style={{ cursor: "pointer" }}
+              onClick={() => setOpen(!open)}
+            />
+
+            {/* Dropdown */}
+            {open && (
+              <div style={styles.dropdown}>
+                <p style={{ fontWeight: "bold", marginBottom: "5px" }}>
+                  {user.userName}
+                </p>
+                <p style={{ fontSize: "14px", marginBottom: "10px" }}>
+                  {user.email}
+                </p>
+                <hr />
+                <button
+                  style={styles.dropdownButton}
+                  onClick={() => {
+                    setOpen(false);
+                    navigate("/profile");
+                  }}>
+                  View Profile
+                </button>
+                <button
+                  style={{ ...styles.dropdownButton, color: "red" }}
+                  onClick={handleLogout}
+                >
+                  Logout
+                </button>
+              </div>
+            )}
+          </div>
         </header>
-        <div style={styles.content}>
-          {children}
-        </div>
+
+        <div style={styles.content}>{children}</div>
       </main>
     </div>
   );
@@ -83,6 +124,27 @@ const styles = {
   },
   content: {
     padding: '20px'
+  },
+   dropdown: {
+    position: "absolute",
+    top: "40px",
+    right: 0,
+    background: "#fff",
+    border: "1px solid #ddd",
+    borderRadius: "8px",
+    padding: "10px 15px",
+    width: "200px",
+    boxShadow: "0 4px 8px rgba(0,0,0,0.1)",
+    zIndex: 1000,
+  },
+  dropdownButton: {
+    background: "none",
+    border: "none",
+    textAlign: "left",
+    width: "100%",
+    padding: "8px 0",
+    cursor: "pointer",
+    fontSize: "14px",
   }
 };
 

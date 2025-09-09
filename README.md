@@ -11,6 +11,9 @@ json-server --watch src/components/data/db.json --port 5000
 npm start 
 
 npm install recharts
+npm install axios
+npm install jwt-decode
+npm install react-icons
 
 ----------------------------
 
