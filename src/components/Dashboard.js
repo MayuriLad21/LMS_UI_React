@@ -1,66 +1,106 @@
-// Dashboard.js
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
 import Layout from './Layout';
-import {
-  BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LineChart, Line
-} from 'recharts';
+import { jwtDecode } from "jwt-decode";
+import API from "../utils/axios"; // ✅ using your axios instance
+import { FaBook, FaCheckCircle, FaSpinner } from "react-icons/fa";
+import MyCourses from "./MyCourses";
+import { AuthContext } from "./AuthContext";
 
-const Dashboard = () => {
-  const [data, setData] = useState(null);
-  const [error, setError] = useState("");
+function Dashboard() {
+  const { user } = useContext(AuthContext);
+  const token = localStorage.getItem("token");
+  var username = "User";
+  let role = "";
+  if (token) {
+    try {
+      const decoded = jwtDecode(token);
+      username =
+        decoded["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"] ||
+        "User";
+      role =
+        decoded["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"] ||
+        "";
+    } catch (error) {
+      console.error("Invalid token:", error);
+    }
+  }
+
+   const [stats, setStats] = useState({
+    enrolled: 0,
+    completed: 0,
+    inProgress: 0,
+  });
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch('http://localhost:8000/api/dashboard/')
-      .then(response => {
-        if (!response.ok) throw new Error("Failed to fetch dashboard data");
-        return response.json();
-      })
-      .then(setData)
-      .catch(err => setError(err.message));
+    const fetchStats = async () => {
+      try {
+        const response = await API.get("/Courses/GetStudentDashboardSummery");
+        setStats(response.data);
+      } catch (error) {
+        console.error("Error fetching stats:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchStats();
   }, []);
+  
+   return (
+    <Layout>     
+     <div style={styles.container}>
+      <h2>Welcome, {username} 👋</h2>
 
-  return (
-    <Layout>
-      <h2>Dashboard</h2>
-      {error && <p style={{ color: 'red' }}>Error: {error}</p>}
-      {!data ? (
-        <p>Loading...</p>
+      {loading ? (
+        <p>Loading dashboard...</p>
       ) : (
-        <>
-          {/* Summary Cards */}
-          <div style={{ display: 'flex', gap: '20px', marginBottom: '30px' }}>
-            <div><strong>Total Courses:</strong> {data.total_courses}</div>
-            <div><strong>Total Students:</strong> {data.total_students}</div>
-            <div><strong>Active Users Today:</strong> {data.active_users_today}</div>
+        <div style={styles.statsContainer}>
+          {/* Enrolled */}
+          <div style={styles.card}>
+            <FaBook size={30} color="#007bff" />
+            <h3>{stats.enrolled}</h3>
+            <p>Enrolled</p>
           </div>
 
-          {/* New Registrations Line Chart */}
-          <h3>New User Registrations (Last 5 Days)</h3>
-          <ResponsiveContainer width="100%" height={250}>
-            <LineChart data={data.new_registrations}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="date" />
-              <YAxis />
-              <Tooltip />
-              <Line type="monotone" dataKey="count" stroke="#8884d8" />
-            </LineChart>
-          </ResponsiveContainer>
+          {/* Completed */}
+          <div style={styles.card}>
+            <FaCheckCircle size={30} color="#28a745" />
+            <h3>{stats.completed}</h3>
+            <p>Completed</p>
+          </div>
 
-          {/* Top Courses Bar Chart */}
-          <h3 style={{ marginTop: '40px' }}>Top Enrolled Courses</h3>
-          <ResponsiveContainer width="100%" height={300}>
-            <BarChart data={data.top_courses} layout="vertical">
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis type="number" />
-              <YAxis dataKey="name" type="category" />
-              <Tooltip />
-              <Bar dataKey="enrollments" fill="#82ca9d" />
-            </BarChart>
-          </ResponsiveContainer>
-        </>
+          {/* In Progress */}
+          <div style={styles.card}>
+            <FaSpinner size={30} color="#ffc107" />
+            <h3>{stats.inProgress}</h3>
+            <p>In Progress</p>
+          </div>
+        </div>
       )}
+
+       <MyCourses />
+    </div>
     </Layout>
   );
+}
+
+const styles = {
+  container: {
+    padding: "20px",
+  },
+  statsContainer: {
+    display: "flex",
+    gap: "20px",
+    marginTop: "20px",
+  },
+  card: {
+    flex: 1,
+    background: "#fff",
+    padding: "20px",
+    borderRadius: "10px",
+    boxShadow: "0 4px 6px rgba(0,0,0,0.1)",
+    textAlign: "center",
+  },
 };
 
 export default Dashboard;
