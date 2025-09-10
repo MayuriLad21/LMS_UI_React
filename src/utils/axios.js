@@ -3,8 +3,8 @@ import axios from "axios";
 // base URL for your backend
 const API = axios.create({
 
-  baseURL: process.env.REACT_APP_API_URL ,
-
+  //baseURL: process.env.REACT_APP_API_URL ,
+baseURL: "https://vks-lms-api-cfaubjg4emfme8f4.centralindia-01.azurewebsites.net/api"
 });
 
 // ✅ Interceptor: attach token to every request
