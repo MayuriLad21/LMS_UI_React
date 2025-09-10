@@ -1,7 +1,7 @@
 // src/context/AuthContext.js
 import React, { createContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import jwt_decode from "jwt-decode";
+import {jwtDecode} from "jwt-decode";
 
 export const AuthContext = createContext();
 
@@ -14,7 +14,7 @@ export const AuthProvider = ({ children }) => {
 
     if (token) {
       try {
-        const decoded = jwt_decode(token);
+        const decoded = jwtDecode(token);
         const expiryTime = decoded.exp * 1000; // ms
         const currentTime = Date.now();
 
@@ -40,7 +40,7 @@ export const AuthProvider = ({ children }) => {
 
   const handleLogin = (token) => {
     localStorage.setItem("token", token);
-    const decoded = jwt_decode(token);
+    const decoded = jwtDecode(token);
     setUser(decoded);
   };
 

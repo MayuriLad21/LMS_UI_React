@@ -17,8 +17,9 @@ function App() {
 
 
   return (
-    <AuthProvider>  
+    
       <Router>
+         <AuthProvider> 
         <Routes>
           <Route path="/" element={<Login />} />
           <Route 
@@ -35,8 +36,9 @@ function App() {
           <Route path="/course/:id" element={isAuthenticated ? <CourseDetails /> : <Navigate to="/" />} />
           <Route path="/register" element={<Registeruser />} />
         </Routes>
+        </AuthProvider>
       </Router>
-    </AuthProvider>
+    
   );
 }
 

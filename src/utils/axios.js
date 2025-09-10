@@ -2,7 +2,7 @@ import axios from "axios";
 
 // base URL for your backend
 const API = axios.create({
-  baseURL: "https://localhost:7098/api",
+  baseURL: "https://localhost:7098/api" || "https://vks-lms-api-cfaubjg4emfme8f4.centralindia-01.azurewebsites.net/api",
 });
 
 // ✅ Interceptor: attach token to every request
