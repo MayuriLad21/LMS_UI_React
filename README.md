@@ -8,6 +8,9 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 npm install -g json-server
 json-server --watch src/components/data/db.json --port 5000
 
+npm install react-scripts --save //for react script issue
+
+
 npm start 
 
 npm install recharts
