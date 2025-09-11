@@ -1,10 +1,14 @@
 import React, { useState } from "react";
 import { useNavigate, Link } from 'react-router-dom';
 import { FaUserCircle } from "react-icons/fa";
+import { useContext } from "react";
+import { AuthContext } from "./AuthContext";
 
 const Layout = ({ children }) => {
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
+  const { setIsAuthenticated } = useContext(AuthContext);
+
 
 
   const user = JSON.parse(localStorage.getItem("user")) || {
@@ -15,6 +19,7 @@ const Layout = ({ children }) => {
 
   const handleLogout = () => {
     localStorage.clear();
+    setIsAuthenticated(false);
     navigate('/');
   };
 
