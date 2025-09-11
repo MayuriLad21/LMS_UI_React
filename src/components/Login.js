@@ -41,7 +41,7 @@ export default function Login() {
    
      <div style={styles.wrapper}>
       <form onSubmit={handleLogin} style={styles.form}>
-        <h2 style={styles.title}>Login to VKS LMS</h2>
+        <h2 style={styles.title}>Login to LMS</h2>
         <input
           type="email"
           placeholder="Email"
