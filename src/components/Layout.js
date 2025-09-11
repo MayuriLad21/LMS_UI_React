@@ -23,7 +23,7 @@ const Layout = ({ children }) => {
   return (
     <div style={styles.container}>
       <aside style={styles.sidebar}>
-        <h2>VKS LMS</h2>
+        <h2> LMS</h2>
         <nav>
           <Link to="/dashboard" style={styles.link}>Dashboard</Link>
           <Link to="/courses" style={styles.link}>Course List</Link>
