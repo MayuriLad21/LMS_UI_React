@@ -1,5 +1,7 @@
-import React, { useState } from "react";
+import React, { useState,useContext } from "react";
 import { useNavigate } from "react-router-dom";
+import { AuthContext } from "./AuthContext";
+
 //import axios from "axios";
 import API from "../utils/axios";
 export default function Login() {
@@ -7,6 +9,7 @@ export default function Login() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const navigate = useNavigate();
+  const { setIsAuthenticated } = useContext(AuthContext);
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -26,7 +29,7 @@ export default function Login() {
         if (response.data.user) {
           localStorage.setItem("user", JSON.stringify(response.data.user));
         }
-
+         setIsAuthenticated(true);
         // Redirect to Dashboard
         navigate("/dashboard");
       } else {

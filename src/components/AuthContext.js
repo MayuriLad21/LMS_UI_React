@@ -6,11 +6,19 @@ import {jwtDecode} from "jwt-decode";
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
+  const [isAuthenticated, setIsAuthenticated] = useState(!!localStorage.getItem("token"));
   const [user, setUser] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
     const token = localStorage.getItem("token");
+     const userData = localStorage.getItem("user");
+    setIsAuthenticated(!!token);
+    if (userData) {
+      setUser(JSON.parse(userData));
+    }
+
+
 
     if (token) {
       try {
@@ -51,7 +59,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, handleLogin, handleLogout }}>
+    <AuthContext.Provider value={{ user, handleLogin, handleLogout,isAuthenticated, setIsAuthenticated }}>
       {children}
     </AuthContext.Provider>
   );
